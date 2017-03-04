@@ -1,0 +1,24 @@
+{
+  "name": "the-ships",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mummakill/The-Ships.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mummakill/The-Ships/issues"
+  },
+  "homepage": "https://github.com/Mummakill/The-Ships#readme",
+  "devDependencies": {
+    "eslint": "^3.17.0",
+    "lodash": "^4.17.4"
+  }
+}
