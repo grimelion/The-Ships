@@ -8,9 +8,11 @@
 INSTALLATION
 ------------
 First you need to intall necessary tools for typescript and task runner
+
         npm install --global typescript gulp-cli
 
 BUILDING
 ------------
 To build all typescript files
+
         gulp
