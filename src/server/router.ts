@@ -8,8 +8,8 @@ http.createServer( (request, response) => {
     if (uri === '/') {
         uri = '/index.html';
     }
-console.log(path.join(__dirname, '../client', uri));
-    fs.readFile(path.join(__dirname, '/client', uri), (error, content) => {
+
+    fs.readFile(path.join(__dirname, '../client', uri), (error, content) => {
         if (error) {
             response.writeHead(404);
             response.end();
