@@ -2,30 +2,21 @@ const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
 const webpack = require('webpack-stream');
+const spawn = require('child_process').spawn;
 
 gulp.task('sass', () => {
     return gulp.src([
-            'src/**/*.scss'
+            'src/**/app.scss'
         ])
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass())
         .pipe(gulp.dest('build'));       
 });
 
-gulp.task('default', () => {
+gulp.task('static', () => {
     return gulp.src([
-            'src/app/**/*.ts'
+            'src/client/**/*.html'
         ])
-        .pipe(ts({
-            module: 'commonjs'
-        }))
-        .pipe(gulp.dest('build/app'));
-});
-
-gulp.task('html', () => {
-    return gulp.src([
-            'src/app/client/**/*.html'
-        ])
-        .pipe(gulp.dest('build/app/js'));
+        .pipe(gulp.dest('build/client'));
 });
 
 gulp.task('vendors', () => {
@@ -33,18 +24,21 @@ gulp.task('vendors', () => {
             'node_modules/lodash/lodash.min.js', 
             'node_modules/three/build/three.min.js' 
         ])
-        .pipe(gulp.dest('build/app/js'));
+        .pipe(gulp.dest('build/client/js'));
 });
 
-gulp.task('app', ['vendors'], () => {
+gulp.task('client', ['static', 'vendors'], () => {
     return gulp.src([
-            'src/app/client/**/*.ts'
+            'src/client/**/*.ts'
         ])
         .pipe(webpack({
             module: {
                 loaders: [
                     {
-                        loader: 'awesome-typescript-loader'
+                        loader: 'awesome-typescript-loader',
+                        query: {
+                            silent: true
+                        }
                     }
                 ]
             },
@@ -56,5 +50,17 @@ gulp.task('app', ['vendors'], () => {
                 filename: 'app.js'
             }
         }))
-        .pipe(gulp.dest('build/app/js'));
+        .pipe(gulp.dest('build/client/js'));
 });
+
+gulp.task('server', () => {
+    return gulp.src([
+            'src/server/**/*.ts'
+        ])
+        .pipe(ts({
+            module: 'commonjs'
+        }))
+        .pipe(gulp.dest('build/server'));
+});
+
+gulp.task('default', ['client', 'server']);
