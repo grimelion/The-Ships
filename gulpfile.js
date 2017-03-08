@@ -4,12 +4,14 @@ const sass = require('gulp-sass');
 const webpack = require('webpack-stream');
 const spawn = require('child_process').spawn;
 
+let typescript = ts.createProject('tsconfig.json');
+
 gulp.task('sass', () => {
     return gulp.src([
-            'src/**/app.scss'
+            'src/client/css/app.scss'
         ])
         .pipe(sass())
-        .pipe(gulp.dest('build'));       
+        .pipe(gulp.dest('build/client/css'));       
 });
 
 gulp.task('static', () => {
@@ -27,7 +29,7 @@ gulp.task('vendors', () => {
         .pipe(gulp.dest('build/client/js'));
 });
 
-gulp.task('client', ['static', 'vendors'], () => {
+gulp.task('client', ['static', 'vendors', 'sass'], () => {
     return gulp.src([
             'src/client/**/*.ts'
         ])
@@ -57,9 +59,7 @@ gulp.task('server', () => {
     return gulp.src([
             'src/server/**/*.ts'
         ])
-        .pipe(ts({
-            module: 'commonjs'
-        }))
+        .pipe(typescript())
         .pipe(gulp.dest('build/server'));
 });
 
