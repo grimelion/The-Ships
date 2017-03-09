@@ -4,7 +4,12 @@ const sass = require('gulp-sass');
 const webpack = require('webpack-stream');
 const spawn = require('child_process').spawn;
 
-let typescript = ts.createProject('tsconfig.json');
+let typescript = ts.createProject(
+    'tsconfig.json',
+    {
+        target: 'es6'
+    }
+);
 
 gulp.task('sass', () => {
     return gulp.src([
@@ -23,6 +28,9 @@ gulp.task('static', () => {
 
 gulp.task('vendors', () => {
     return gulp.src([
+            'node_modules/react/dist/react.min.js', 
+            'node_modules/react-dom/dist/react-dom.min.js', 
+            'node_modules/redux/dist/redux.min.js', 
             'node_modules/lodash/lodash.min.js', 
             'node_modules/three/build/three.min.js' 
         ])
@@ -31,6 +39,7 @@ gulp.task('vendors', () => {
 
 gulp.task('client', ['static', 'vendors', 'sass'], () => {
     return gulp.src([
+            'src/client/**/*.tsx',
             'src/client/**/*.ts'
         ])
         .pipe(webpack({
@@ -44,9 +53,15 @@ gulp.task('client', ['static', 'vendors', 'sass'], () => {
                     }
                 ]
             },
+            resolve: {
+                extensions: ['', '.tsx', '.ts']
+            },
             externals: {
-                three: 'THREE',
-                lodash: '_'
+                'react': 'React',
+                'react-dom': 'ReactDOM',
+                'redux': 'Redux',
+                'lodash': '_',
+                'three': 'THREE'
             },
             output: {
                 filename: 'app.js'
