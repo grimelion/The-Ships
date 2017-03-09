@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "target": "es5",
+        "jsx": "react",
+        "typeRoots" : [
+            "./@types",
+            "./node_modules/@types"
+        ]
+    }
+}

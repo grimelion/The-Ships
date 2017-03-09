@@ -1,0 +1,42 @@
+{
+  "name": "the-ships",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node build/server/base.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mummakill/The-Ships.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mummakill/The-Ships/issues"
+  },
+  "homepage": "https://github.com/Mummakill/The-Ships#readme",
+  "dependencies": {
+    "@types/lodash": "^4.14.54",
+    "@types/node": "^7.0.5",
+    "@types/react": "^15.0.14",
+    "@types/react-dom": "^0.14.23",
+    "@types/three": "^0.84.0",
+    "lodash": "^4.17.4",
+    "mime-types": "^2.1.14",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "redux": "^3.6.0",
+    "three": "^0.84.0"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.1.2",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-typescript": "^3.1.5",
+    "ts-loader": "^2.0.1",
+    "typescript": "^2.2.1",
+    "webpack-stream": "^3.2.0"
+  }
+}
