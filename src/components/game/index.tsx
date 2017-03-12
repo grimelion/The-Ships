@@ -3,6 +3,7 @@ import GameModel from './model';
 import { storage } from './../../app';
 
 class GameComponent extends React.Component<GameModel, {}> {
+    private canvas: HTMLCanvasElement
 
     componentDidMount() {
         
@@ -11,7 +12,12 @@ class GameComponent extends React.Component<GameModel, {}> {
     render() {
         return (
             <div className={'game-wrap'}>
-                <canvas ref={'canvas'} />
+                <canvas 
+                    ref={
+                        (element) => {
+                            this.canvas = element;
+                        }
+                    } />
             </div>
         );
     }
