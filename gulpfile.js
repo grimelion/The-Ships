@@ -13,7 +13,7 @@ let typescript = ts.createProject(
 
 gulp.task('sass', () => {
     return gulp.src([
-            'src/client/css/app.scss'
+            'src/front/css/app.scss'
         ])
         .pipe(sass())
         .pipe(gulp.dest('build/client/css'));       
@@ -21,7 +21,7 @@ gulp.task('sass', () => {
 
 gulp.task('static', () => {
     return gulp.src([
-            'src/client/**/*.html'
+            'src/front/**/*.html'
         ])
         .pipe(gulp.dest('build/client'));
 });
@@ -39,8 +39,12 @@ gulp.task('vendors', () => {
 
 gulp.task('client', ['static', 'vendors', 'sass'], () => {
     return gulp.src([
-            'src/client/**/*.tsx',
-            'src/client/**/*.ts'
+            'src/app/**/*.ts',
+            'src/app/**/*.tsx',
+            'src/front/**/*.ts',
+            'src/front/**/*.tsx',
+            'src/components/**/*.ts',
+            'src/components/**/*.tsx'
         ])
         .pipe(webpack({
             module: {
@@ -72,7 +76,8 @@ gulp.task('client', ['static', 'vendors', 'sass'], () => {
 
 gulp.task('server', () => {
     return gulp.src([
-            'src/server/**/*.ts'
+            'src/**/*.ts',
+            'src/**/*.tsx'
         ])
         .pipe(typescript())
         .pipe(gulp.dest('build/server'));
