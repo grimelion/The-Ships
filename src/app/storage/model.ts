@@ -1,9 +1,16 @@
-type Events =
-    'router.navigate';
+import { Reducer } from 'redux';
+import { ReducersModel } from './reducers/model';
 
-interface Action {
+type Events =
+    'location.change';
+
+interface ActionModel {
     type: Events,
-    [name: string]: any
+    data: {
+        [name: string]: any
+    }
 }
 
-export { Action, Events };
+interface StorageModel extends ReducersModel {}
+
+export { ActionModel, StorageModel };

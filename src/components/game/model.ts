@@ -1,6 +1,4 @@
-import ComponentModel from './../model';
-
-interface GameModel extends ComponentModel {}
+interface GameModel {}
 
 export default GameModel;
 export { GameModel };

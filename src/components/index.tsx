@@ -1,26 +1,31 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Menu from './menu';
+import MenuItem from './menu-item';
 import Page from './page';
 import Game from './game';
-import { storage, router } from './../app';
+import { subscribe } from './../app';
 
 function globalRender(): void {
     ReactDOM.render(
         <div className={'page-wrapper'}>
-            <Menu items={[{title: 'Haha', link: '/game'}]} />
-            <Page id={'home'} path={'/'}>
-                Home
-            </Page>
-            <Page id={'game'} path={'/game'}>
-                <Game />
-            </Page>
-            <a href={'/game'}>test me</a>
+            <header>
+                <MenuItem id={'home'} path={'/'}>Home</MenuItem>
+                <MenuItem id={'game'} path={'/game'}>Game</MenuItem>
+            </header>
+            
+            <section>
+                <Page id={'home'} path={'/'}>
+                    Home
+                </Page>
+                <Page id={'game'} path={'/game'}>
+                    <Game />
+                </Page>
+            </section>
         </div>,
         document.getElementById('content-wrapper')
     );
 }
 
-storage.subscribe(globalRender);
+subscribe(globalRender);
 
 document.addEventListener('DOMContentLoaded', globalRender);
