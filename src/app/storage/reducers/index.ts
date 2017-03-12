@@ -1,8 +1,9 @@
 import { combineReducers, Reducer } from 'redux';
-import { router } from './router';
+import { ReducersModel } from './model';
+import { location } from './location';
 
-let combined: Reducer<any> = combineReducers({
-    router
+let combined = combineReducers<ReducersModel>({
+    location
 });
 
 export { combined };

@@ -1,6 +1,4 @@
-import ComponentModel from './../model';
-
-interface PageModel extends ComponentModel {
+interface PageModel {
     id: string;
     path: string;
 }
