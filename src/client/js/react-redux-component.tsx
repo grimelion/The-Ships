@@ -5,14 +5,14 @@ interface CanvasModel {
 }
 
 export class CanvasComponent extends React.Component<CanvasModel, {}> {
-    ComponentDidMount() {
+    componentDidMount() {    
         console.log(this.refs.scene);
     }
 
     render() {
         return (
             <div className="scene-content">
-                <canvas id="scene" ref="scene" />
+                <canvas id="canvas" ref="scene" />
             </div>
         );
     }
