@@ -1,0 +1,8 @@
+.page {
+    display: none;
+    width: 100%;
+}
+
+.page.current {
+    display: block;
+}
