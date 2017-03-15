@@ -2,10 +2,12 @@ import * as three from 'three';
 import { has } from 'lodash';
 import { Camera } from './camera';
 import { Scene } from './scene';
+import { Item } from './item';
 
-class GraphicEngine {
+class Engine {
     private cameras: { [id: string]: Camera };
     private scenes: { [id: string]: Scene };
+    private items: { [id: string]: Item };
     private renderer: three.WebGLRenderer;
     private canvas: HTMLCanvasElement;
 
@@ -14,7 +16,7 @@ class GraphicEngine {
         this.scenes = Object.create(null);
     }
     
-    initialize(canvas: HTMLCanvasElement): GraphicEngine {
+    initialize(canvas: HTMLCanvasElement): Engine {
         this.renderer = new three.WebGLRenderer({ canvas });
         return this;
     }
@@ -33,7 +35,16 @@ class GraphicEngine {
         return this.scenes[id];
     }
 
-    dispatch(command: string = 'render') {
-        
+    item(id: string): Item {
+        if (!has(this.cameras, id)) {
+            this.items[id] = new Item(this.scene);
+        }
+        return this.items[id];        
+    }
+
+    render(): Engine {
+        return this;
     }
 }
+
+export { Engine };

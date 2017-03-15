@@ -1,12 +1,13 @@
 import * as React from 'react';
 import GameModel from './model';
 import { getState } from './../../app';
+import { game } from './../../app/game';
 
 class GameComponent extends React.Component<GameModel, {}> {
     private canvas: HTMLCanvasElement;
 
     componentDidMount() {
-        
+        game.initialize(this.canvas);
     }
 
     render() {

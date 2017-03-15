@@ -1,7 +1,7 @@
 import * as three from 'three';
 
 interface SceneParams {
-    background?: three.Color | three.Texture | three.CubeTexture;
+    background?: number/*three.Color | three.Texture | three.CubeTexture*/;
     fog?: three.Fog;
 }
 
@@ -17,12 +17,12 @@ class Scene {
         if ( !(scene = this.instance) ) {
             scene = this.instance = new three.Scene();
         }
-        scene.background = background;
+        scene.background = new three.Color(background);
         return this;
     }
 
-    addObject(id: string, thing: three.Object3D): Scene {
-        this.instance.add(thing);
+    addItem(id: string, item: three.Object3D): Scene {
+        this.instance.add(item);
         return this;
     }
 }

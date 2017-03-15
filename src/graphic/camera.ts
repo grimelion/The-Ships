@@ -1,10 +1,15 @@
 import * as three from 'three';
 import { get, has } from 'lodash';
+import { Vector } from './data';
 
 type CameraType = 
     'orthogonal'
   | 'perspective';
-  
+
+interface CameraSignature {
+    [key: string]: any;
+}
+
 interface CameraParams {
     type?: CameraType;
     fov?: number;
@@ -20,24 +25,25 @@ interface CameraParams {
 
 class Camera {
     public type: CameraType;
-    private instance: any;
+    private instance: three.OrthographicCamera | three.PerspectiveCamera;
 
     constructor() {}
 
-    private applyParams(keys: string[], params: CameraParams) {
+    private applyParams(keys: string[], params: CameraParams): void {
         let shouldUpdate = false;
         keys.forEach( (item) => {
-            if ( has(params, item) && this.instance[item] !== get(params, item) ) {
-                this.instance[item] = get(params, item);
+            if ( has(params, item) && (<CameraSignature>this.instance)[item] !== get(params, item) ) {
+                (<CameraSignature>this.instance)[item] = get(params, item);
                 shouldUpdate = true;
             }
         });
+
         if (shouldUpdate) {
             this.instance.updateProjectionMatrix();          
         }
     }
 
-    setFrustum(params: CameraParams): Camera {
+    setParams(params: CameraParams): Camera {
         let { fov, aspect, near, far, left, right, top, bottom } = params;
         
         if (!this.instance) {
@@ -73,18 +79,18 @@ class Camera {
         return this;
     }
 
-    lookAt(coords: three.Vector3): Camera {
-        this.instance.lookAt(coords);
+    lookAt(coords: Vector): Camera {
+        this.instance.lookAt(<three.Vector3>coords);
         return this;
     }
 
-    moveTo(coords: three.Vector3): Camera {
-        this.instance.position = coords;
+    moveTo(coords: Vector): Camera {
+        this.instance.position = <three.Vector3>coords;
         return this;
     }
 
-    rotateTo(coords: three.Euler): Camera {
-        this.instance.rotation = coords;
+    rotateTo(coords: Vector): Camera {
+        this.instance.rotation = <three.Euler>coords;
         return this;
     }
 }
