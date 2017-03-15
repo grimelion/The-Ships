@@ -1,6 +1,10 @@
 import * as three from 'three';
+import { isFunction } from 'lodash';
 
-interface ItemParams {}
+interface ItemParams {
+    texture?: any;
+    model?: Function;
+}
 
 class Item {
     instance: three.Object3D;
@@ -11,6 +15,10 @@ class Item {
     }
 
     setParams(params: ItemParams): Item {
+        let { model, texture } = params;
+        if ( isFunction(model) ) {
+            var a =  model();
+        }
         return this;
     }
 

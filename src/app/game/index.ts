@@ -18,9 +18,11 @@ game.scene('test')
         background: 0xcccccc
     });
 
-game.item('nazi.ship')
+game.item('drakkar')
     .setParams({
-        
+        model: () => {
+            
+        }
     })
     .appendTo('test');
 
