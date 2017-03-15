@@ -1,5 +1,5 @@
 import * as three from 'three';
-import { has } from 'lodash';
+import { get, has } from 'lodash';
 
 type CameraType = 
     'orthogonal'
@@ -24,11 +24,20 @@ class Camera {
 
     constructor() {}
 
-    private instantiate(): three.Camera {
-        return new three.Camera();
+    private applyParams(keys: string[], params: CameraParams) {
+        let shouldUpdate = false;
+        keys.forEach( (item) => {
+            if ( has(params, item) && this.instance[item] !== get(params, item) ) {
+                this.instance[item] = get(params, item);
+                shouldUpdate = true;
+            }
+        });
+        if (shouldUpdate) {
+            this.instance.updateProjectionMatrix();          
+        }
     }
 
-    set(params: CameraParams): Camera {
+    setFrustum(params: CameraParams): Camera {
         let { fov, aspect, near, far, left, right, top, bottom } = params;
         
         if (!this.instance) {
@@ -48,23 +57,17 @@ class Camera {
             let type = this.type;
             let shouldUpdate = false;
             if (type === 'orthogonal') {
-                ['left', 'right', 'top', 'bottom', 'near', 'far'].forEach((item: any) => {
-                    if ( has(params, item) && this.instance[item] !== [item] ) {
-                        this.instance[item] = [item];
-                        shouldUpdate = false;
-                    }
-                });
+                this.applyParams(
+                    ['left', 'right', 'top', 'bottom', 'near', 'far'],
+                    params
+                );
+                
             }
             else if (type === 'perspective') {
-                ['fov', 'aspect', 'near', 'far'].forEach((item: any) => {
-                    if ( has(params, item) && this.instance[item] !== [item] ) {
-                        this.instance[item] = [item];
-                        shouldUpdate = false;
-                    }
-                });
-            }
-            if (shouldUpdate) {
-                this.instance.updateProjectionMatrix();          
+                this.applyParams(
+                    ['fov', 'aspect', 'near', 'far'],
+                    params
+                );               
             }
         }
         return this;

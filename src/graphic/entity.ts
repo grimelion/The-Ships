@@ -5,12 +5,12 @@ interface SceneParams {
     fog?: three.Fog;
 }
 
-class Scene {
+class Entity {
     instance: three.Scene;
 
     constructor() {}
 
-    setParams(params: SceneParams): Scene {
+    setParams(params: SceneParams): Entity {
         let scene: three.Scene;
         let { background } = params;
 
@@ -21,10 +21,10 @@ class Scene {
         return this;
     }
 
-    addObject(id: string, thing: three.Object3D): Scene {
+    addObject(id: string, thing: three.Object3D): Entity {
         this.instance.add(thing);
         return this;
     }
 }
 
-export { Scene };
+export { Entity };
