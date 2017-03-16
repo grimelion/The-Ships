@@ -4,10 +4,12 @@ import { Camera } from './camera';
 import { Scene } from './scene';
 import { Item } from './item';
 
-class Engine {
+class GraphicEngine {
     private cameras: { [id: string]: Camera };
     private scenes: { [id: string]: Scene };
     private items: { [id: string]: Item };
+    private masterCamera: Camera;
+    private masterScene: Scene;
     private renderer: three.WebGLRenderer;
     private canvas: HTMLCanvasElement;
 
@@ -15,9 +17,17 @@ class Engine {
         this.cameras = Object.create(null);
         this.scenes = Object.create(null);
     }
+
+    private frame() {
+        this.renderer.render(this.masterScene.instance, this.masterCamera.instance);
+        requestAnimationFrame(this.frame);
+    }
     
-    initialize(canvas: HTMLCanvasElement): Engine {
+    initialize(canvas: HTMLCanvasElement, startRendering: boolean = true): GraphicEngine {
         this.renderer = new three.WebGLRenderer({ canvas });
+        if (startRendering) {
+            this.render();
+        }
         return this;
     }
 
@@ -42,7 +52,7 @@ class Engine {
         return this.items[id];        
     }
 
-    render(): Engine {
+    render(): GraphicEngine {
         if (!this.renderer) {
             throw new Error('Impossible to render uninitialized engine');
         }
@@ -53,4 +63,4 @@ class Engine {
     }
 }
 
-export { Engine };
+export { GraphicEngine };

@@ -7,7 +7,7 @@ interface ItemParams {
 }
 
 class Item {
-    instance: three.Object3D;
+    instance: three.Mesh;
     scene: Function;
 
     constructor(sceneCallback: Function) {
@@ -18,7 +18,7 @@ class Item {
         let item: three.Mesh;
         let { geometry, texture } = params;
         if (!this.instance) {
-
+            item = this.instance = new three.Mesh(geometry, texture);
         }
         return this;
     }

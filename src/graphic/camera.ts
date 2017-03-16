@@ -25,7 +25,7 @@ interface CameraParams {
 
 class Camera {
     public type: CameraType;
-    private instance: three.OrthographicCamera | three.PerspectiveCamera;
+    public instance: three.OrthographicCamera | three.PerspectiveCamera;
 
     constructor() {}
 

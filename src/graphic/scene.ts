@@ -6,7 +6,7 @@ interface SceneParams {
 }
 
 class Scene {
-    instance: three.Scene;
+    public instance: three.Scene;
 
     constructor() {}
 
