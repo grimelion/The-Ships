@@ -25,10 +25,11 @@ game.scene('test')
 
 ajax({
         url: '/obj.pack',
-        method: 'get'
+        method: 'get',
+        type: 'buffer'
     })
     .then( (data) => {
-        let decoded = msgpack.decode(data);
+        let decoded = msgpack.decode(<Buffer>data);
         game.item('drakkar')
             .setParams({
                 geometry: data

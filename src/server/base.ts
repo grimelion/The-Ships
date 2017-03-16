@@ -13,7 +13,7 @@ createServer((request, response) => {
         let extension: string = uri.split('.').reverse()[0];
         let filename: string;
 
-        if (includes<string>(['css', 'js', 'png'], extension)) {
+        if (includes<string>(['css', 'js', 'png', 'pack'], extension)) {
             filename = uri;
         }
         else {

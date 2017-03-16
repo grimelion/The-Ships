@@ -1,6 +1,7 @@
 interface AJAXRequest {
     url: string;
     method: 'get' | 'post';
+    type: 'json' | 'text' | 'buffer';
     data?: { [key: string]: string | number };
 }
 
@@ -18,9 +19,10 @@ function serialize(obj: { [key: string]: string | number }): string {
         .join('&')
 }
 
-function ajax(request: AJAXRequest): Promise<string> {
-    return new Promise<string>( (resolve, reject) => {
+function ajax(request: AJAXRequest): Promise<string | Object | Buffer> {
+    return new Promise<string | Object | Buffer>( (resolve, reject) => {
         let xhr = new XMLHttpRequest();
+        let { url, method, type, data } = request;
         
         xhr.addEventListener('readystatechange', () => {
             if(xhr.readyState < 4 || xhr.status !== 200) {
@@ -28,7 +30,17 @@ function ajax(request: AJAXRequest): Promise<string> {
             }
              
             if(xhr.readyState === 4) {
-                resolve(xhr.responseText);
+                let data: any;
+                if (type === 'text') {
+                    data = xhr.responseText;
+                }
+                else if (type === 'json') {
+                    data = JSON.parse(xhr.responseText);
+                }
+                else if (type === 'buffer') {
+                    data = xhr.response;
+                }
+                resolve(data);
             }
         });
         xhr.open(request.method.toUpperCase(), request.url, true);
