@@ -43,6 +43,12 @@ class Engine {
     }
 
     render(): Engine {
+        if (!this.renderer) {
+            throw new Error('Impossible to render uninitialized engine');
+        }
+
+        
+
         return this;
     }
 }

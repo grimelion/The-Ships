@@ -2,8 +2,8 @@ import * as three from 'three';
 import { isFunction } from 'lodash';
 
 interface ItemParams {
+    geometry?: any;
     texture?: any;
-    model?: Function;
 }
 
 class Item {
@@ -15,9 +15,10 @@ class Item {
     }
 
     setParams(params: ItemParams): Item {
-        let { model, texture } = params;
-        if ( isFunction(model) ) {
-            var a =  model();
+        let item: three.Mesh;
+        let { geometry, texture } = params;
+        if (!this.instance) {
+
         }
         return this;
     }
