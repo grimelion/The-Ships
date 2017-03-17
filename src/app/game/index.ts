@@ -29,12 +29,16 @@ ajax({
         type: 'buffer'
     })
     .then( (data) => {
-        let decoded = msgpack.decode(<Buffer>data);
-        game.item('drakkar')
-            .setParams({
-                geometry: data
-            })
-            .appendTo('test');
+            let decoded = msgpack.decode(<Buffer>data);
+            game.item('drakkar')
+                .setParams({
+                    geometry: data
+                })
+                .appendTo('test');
+
+            game.render();
+        }, (reason) => {
+            console.log(reason);
     });
 
 export { game };

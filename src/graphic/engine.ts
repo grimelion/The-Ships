@@ -18,9 +18,9 @@ class GraphicEngine {
         this.scenes = Object.create(null);
     }
 
-    private frame() {
+    private frame(): void {
         this.renderer.render(this.masterScene.instance, this.masterCamera.instance);
-        requestAnimationFrame(this.frame);
+        requestAnimationFrame(GraphicEngine.prototype.frame.bind(this));
     }
     
     initialize(canvas: HTMLCanvasElement, startRendering: boolean = true): GraphicEngine {
@@ -33,14 +33,14 @@ class GraphicEngine {
 
     camera(id: string): Camera {
         if (!has(this.cameras, id)) {
-            this.cameras[id] = new Camera();
+            this.masterCamera = this.cameras[id] = new Camera();
         }
         return this.cameras[id];
     }
 
     scene(id: string): Scene {
         if (!has(this.cameras, id)) {
-            this.cameras[id] = new Camera();
+            this.masterScene = this.scenes[id] = new Scene();
         }
         return this.scenes[id];
     }
@@ -57,8 +57,12 @@ class GraphicEngine {
             throw new Error('Impossible to render uninitialized engine');
         }
 
-        
+        this.frame();
 
+        return this;
+    }
+
+    freeze(): GraphicEngine {
         return this;
     }
 }

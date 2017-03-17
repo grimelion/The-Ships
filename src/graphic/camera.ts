@@ -85,7 +85,7 @@ class Camera {
     }
 
     moveTo(coords: Vector): Camera {
-        this.instance.position = <three.Vector3>coords;
+        this.instance.position.set(coords.x, coords.y, coords.z);
         return this;
     }
 

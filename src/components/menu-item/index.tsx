@@ -6,7 +6,7 @@ class MenuItemComponent extends React.Component<MenuItemModel, {}> {
     render() {
         let current = getState().location.current === this.props.id ? 'current' : '';
         return (
-            <a href={'/'} className={`item ${current}`}>{this.props.children}</a>
+            <a href={this.props.path} className={`item ${current}`}>{this.props.children}</a>
         );
     }
 }
