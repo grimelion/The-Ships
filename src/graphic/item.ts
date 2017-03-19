@@ -7,8 +7,8 @@ interface ItemParams {
 }
 
 class Item {
+    private scene: Function;
     instance: three.Mesh;
-    scene: Function;
 
     constructor(sceneCallback: Function) {
         this.scene = sceneCallback;

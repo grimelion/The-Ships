@@ -7,38 +7,32 @@ const game = new GraphicEngine();
 
 game.camera('main')
     .setParams({
-        type: 'perspective',
-        aspect: 1,
-        fov: 50,
-        near: 0,
-        far: 100
+        type: 'orthogonal',
+		left: -400,
+		right: 400,
+		top: 200,
+		bottom: -200,
+        near: 1,
+        far: 500
     })
-    .moveTo({ x: 10, y: 16, z: 15 })
+    .moveTo({ x: 50, y: 50, z: 50 })
     .lookAt({ x: 0, y: 0, z: 0 });
 
 game.scene('test')
     .setParams({
-        background: 0xcccccc
+        background: 0x999999
     });
 
+function generateTerrain() {
+    return new three.PlaneGeometry(20, 20, 100, 100);
+}
 
+game.item('drakkar')
+   .setParams({
+       geometry: generateTerrain(),
+       texture: new three.MeshBasicMaterial({color: 0xffcc00})
+   });
 
-ajax({
-        url: '/obj.pack',
-        method: 'get',
-        type: 'json'
-    })
-    .then( (data) => {
-            let decoded = msgpack.decode(<Buffer>data);
-            game.item('drakkar')
-                .setParams({
-                    geometry: data
-                })
-                .appendTo('test');
-
-            game.render();
-        }, (reason) => {
-            console.warn(reason);
-    });
+game.scene('test').addItem( game.item('drakkar') ).instance.add( new THREE.AmbientLight( 0xcccccc ) );
 
 export { game };

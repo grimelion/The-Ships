@@ -10,12 +10,13 @@ class GraphicEngine {
     private items: { [id: string]: Item };
     private masterCamera: Camera;
     private masterScene: Scene;
-    private renderer: three.WebGLRenderer;
+    renderer: three.WebGLRenderer;
     private canvas: HTMLCanvasElement;
 
     constructor() {
         this.cameras = Object.create(null);
         this.scenes = Object.create(null);
+        this.items = Object.create(null);
     }
 
     private frame(): void {
@@ -39,15 +40,15 @@ class GraphicEngine {
     }
 
     scene(id: string): Scene {
-        if (!has(this.cameras, id)) {
+        if (!has(this.scenes, id)) {
             this.masterScene = this.scenes[id] = new Scene();
         }
         return this.scenes[id];
     }
 
     item(id: string): Item {
-        if (!has(this.cameras, id)) {
-            this.items[id] = new Item(this.scene);
+        if (!has(this.items, id)) {
+            this.items[id] = new Item( GraphicEngine.prototype.scene.bind(this) );
         }
         return this.items[id];        
     }

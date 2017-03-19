@@ -1,4 +1,5 @@
 import * as three from 'three';
+import { Item } from './item';
 
 interface SceneParams {
     background?: number/*three.Color | three.Texture | three.CubeTexture*/;
@@ -21,8 +22,8 @@ class Scene {
         return this;
     }
 
-    addItem(id: string, item: three.Object3D): Scene {
-        this.instance.add(item);
+    addItem(item: Item): Scene {
+        this.instance.add(item.instance);
         return this;
     }
 }
