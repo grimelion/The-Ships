@@ -63,6 +63,7 @@ class GraphicEngine {
     }
 
     freeze(): GraphicEngine {
+
         return this;
     }
 }

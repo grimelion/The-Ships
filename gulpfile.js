@@ -2,7 +2,9 @@ const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
 const webpack = require('webpack-stream');
-const spawn = require('child_process').spawn;
+const fork = require('child_process').fork;
+
+let server;
 
 let typescript = ts.createProject(
     'tsconfig.json',
@@ -15,7 +17,7 @@ gulp.task('sass', () => {
     return gulp.src([
             'src/front/css/app.scss'
         ])
-        .pipe(sass())
+        .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('build/client/css'));       
 });
 
@@ -38,7 +40,7 @@ gulp.task('vendors', () => {
         .pipe(gulp.dest('build/client/js'));
 });
 
-gulp.task('client', ['static', 'vendors', 'sass'], () => {
+gulp.task('js', () => {
     return gulp.src([
             'src/app/**/*.ts',
             'src/app/**/*.tsx',
@@ -82,6 +84,8 @@ gulp.task('client', ['static', 'vendors', 'sass'], () => {
         .pipe(gulp.dest('build/client/js'));
 });
 
+gulp.task('client', ['static', 'vendors', 'sass', 'js']);
+
 gulp.task('server', () => {
     return gulp.src([
             'src/**/*.ts',
@@ -91,4 +95,21 @@ gulp.task('server', () => {
         .pipe(gulp.dest('build/server'));
 });
 
-gulp.task('default', ['client', 'server']);
+gulp.task('default', ['client', 'server'], () => {
+    server = fork('build/server/server/base.js');
+    gulp.watch(['src/front/css/**/*.scss'], ['sass']);
+    gulp.watch([
+            'src/app/**/*.ts',
+            'src/app/**/*.tsx',
+            'src/front/**/*.ts',
+            'src/front/**/*.tsx',
+            'src/components/**/*.ts',
+            'src/components/**/*.tsx',
+            'src/graphic/**/*.ts',
+            'src/graphic/**/*.tsx',
+            'src/game/**/*.ts',
+            'src/game/**/*.tsx',
+            'src/tools/**/*.ts',
+            'src/tools/**/*.tsx'
+        ], ['js']);
+});

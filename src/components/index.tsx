@@ -9,8 +9,10 @@ function globalRender(): void {
     ReactDOM.render(
         <div className={'page-wrapper'}>
             <header>
-                <MenuItem id={'home'} path={'/'}>Home</MenuItem>
-                <MenuItem id={'game'} path={'/game'}>Game</MenuItem>
+                <nav className={'header-menu'}>
+                    <MenuItem id={'home'} path={'/'}>Home</MenuItem>
+                    <MenuItem id={'game'} path={'/game'}>Game</MenuItem>
+                </nav>    
             </header>
             
             <section>

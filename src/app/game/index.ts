@@ -26,7 +26,7 @@ game.scene('test')
 ajax({
         url: '/obj.pack',
         method: 'get',
-        type: 'buffer'
+        type: 'json'
     })
     .then( (data) => {
             let decoded = msgpack.decode(<Buffer>data);
@@ -38,7 +38,7 @@ ajax({
 
             game.render();
         }, (reason) => {
-            console.log(reason);
+            console.warn(reason);
     });
 
 export { game };
