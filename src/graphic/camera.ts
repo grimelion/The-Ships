@@ -90,7 +90,7 @@ class Camera {
     }
 
     rotateTo(coords: Vector): Camera {
-        this.instance.rotation = <three.Euler>coords;
+        this.instance.rotation.set(coords.x, coords.y, coords.z);
         return this;
     }
 }

@@ -10,6 +10,10 @@ class GameComponent extends React.Component<GameModel, {}> {
         game.initialize(this.canvas);
     }
 
+    componentDidUpdate() {
+        game.refresh();
+    }
+
     render() {
         return (
             <div className={'game-wrap'}>
