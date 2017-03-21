@@ -38,9 +38,22 @@ class GraphicEngine extends Emitter {
         let mouseMoved = false;
         let previousX = 0;
         let previousY = 0;
+        let button: string;
 
         canvas.addEventListener('mousedown', (e) => {
             mouseClicked = true;
+            
+            switch(e.button) {
+                case 0:
+                    button = 'left';
+                    break;
+                case 1:
+                    button = 'wheel';
+                    break;
+                case 2:
+                    button = 'right';
+                    break;
+            }
 
             let mouseX = e.clientX - this.bounds.left;
             let mouseY = e.clientY - this.bounds.top;
@@ -50,7 +63,8 @@ class GraphicEngine extends Emitter {
 
             this.emit('dragstart', {
                 mouseX,
-                mouseY
+                mouseY,
+                button
             });
         });
 
@@ -75,21 +89,32 @@ class GraphicEngine extends Emitter {
                 mouseX,
                 mouseY,
                 deltaX,
-                deltaY
+                deltaY,
+                button
             });
         }); 
         
         document.addEventListener('mouseup', (e) => {
             if ( mouseMoved ) {
-                this.emit('dragend', e);
+                this.emit('dragend', {
+                    button,
+                    target: e.target,
+                    preventDefault: Event.prototype.preventDefault.bind(e)
+                });
             }
             else {
-                this.emit('click', e);
+                this.emit('click', {
+                    button
+                });
             }
-
+            button = '';
             mouseClicked = false;
             mouseMoved = false;
         });
+
+        canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        })
 
         return this;
     }

@@ -30,8 +30,6 @@ abstract class Emitter {
             return;
         }
 
-        data.target = this;
-
         for ( let i = 0, length = listeners.length; i < length; i++ ) {       
         	listeners[ i ].call( this, data );
         }

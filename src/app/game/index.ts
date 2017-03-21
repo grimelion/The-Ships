@@ -56,10 +56,18 @@ game.listen('dragmove', (e) => {
     let camera = game.camera('main').instance;
     let x = camera.position.x;
     let y = camera.position.y;
-    let angle = ( theta * e.deltaX ) / 64;
-    camera.position.x = x * Math.cos(angle) + y * Math.sin(angle);
-    camera.position.y = y * Math.cos(angle) - x * Math.sin(angle);
-    game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
+
+    if (e.button === 'left') {
+        let angle = ( theta * e.deltaX ) / 60;
+        camera.position.x = x * Math.cos(angle) + y * Math.sin(angle);
+        camera.position.y = y * Math.cos(angle) - x * Math.sin(angle);
+        game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
+    }
+    else if (e.button === 'right') {
+        camera.translateX(-e.deltaX);
+        camera.translateY(e.deltaY);
+    }
 });
+
 
 export { game };
