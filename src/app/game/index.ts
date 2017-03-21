@@ -4,7 +4,7 @@ import { ajax } from './../../tools';
 import { GraphicEngine } from './../../graphic/engine';
 
 const game = new GraphicEngine();
-
+let theta = 0;
 game.listen('update', () => {
     let r = game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight;
 
@@ -18,14 +18,18 @@ game.listen('update', () => {
         near: 1,
         far: 1000
     })
-    .moveTo({ x: 200, y: 200, z: 200 })
-    .lookAt({ x: 0, y: 0, z: 0 })
-    .instance.up.set(0,0,1);
+    .moveTo({ x: 200, y: 200, z: 200 });
+    
+
+    game.camera('main').instance.up.set(0,0,1);
+    game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
+
+    theta = 360 / game.bounds.width;
 
     game.render();
 });
 
-
+let dist = new three.Vector3( 200, 200, 0 ).distanceTo( new three.Vector3(0, 0, 0) );
 
 game.scene('test')
     .setParams({
@@ -42,17 +46,19 @@ game.item('drakkar')
        texture: new three.MeshBasicMaterial({color: 0xffcc00})
    })
    .instance.add( new three.AxisHelper(20) );
-   
-// game.item('drakkar').instance.rotateX(-90);
 
-// game.item('drakkar').instance.rotateX(90);
 game.scene('test').addItem( game.item('drakkar') ).instance.add( new THREE.AmbientLight( 0xcccccc ) );
 
 game.listen('dragstart', (e) => {
-
+    console.log(theta);
 });
 game.listen('dragmove', (e) => {
-    game.camera('main').instance.translateX(-e.deltaX);
+    let camera = game.camera('main').instance;
+    let x = camera.position.x;
+    let y = camera.position.y;
+    let angle = ( theta * e.deltaX ) / 64;
+    camera.position.x = x * Math.cos(angle) + y * Math.sin(angle);
+    camera.position.y = y * Math.cos(angle) - x * Math.sin(angle);
     game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
 });
 

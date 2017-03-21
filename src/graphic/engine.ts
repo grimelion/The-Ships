@@ -11,7 +11,7 @@ class GraphicEngine extends Emitter {
     private items: { [ id: string ]: Item };
     private masterCamera: Camera;
     private masterScene: Scene;
-    private bounds: ClientRect;
+    bounds: ClientRect;
     renderer: three.WebGLRenderer;
     listeners: Listeners;
 
