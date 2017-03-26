@@ -1,10 +1,23 @@
 import * as three from 'three';
 import * as msgpack from 'msgpack-lite';
 import { ajax } from './../../tools';
-import { GraphicEngine } from './../../graphic/engine';
+import { Ymir } from './../../graphic/ymir';
 
-const game = new GraphicEngine();
-let theta = 0;
+Ymir.initialize();
+const game = Ymir.module( 'game' );
+let camera: three.Camera;
+
+
+let deltaX: number;
+let offset = new three.Vector3();
+let rotateStart = new three.Vector2();
+let rotateEnd = new three.Vector2();
+let rotateDelta = new three.Vector2();
+let spherical = new three.Spherical(75, Math.PI / 4, 0);
+let sphericalDelta = new three.Spherical();
+let quat: three.Quaternion;
+let quatInverse: three.Quaternion;;
+
 game.listen('update', () => {
     let r = game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight;
 
@@ -14,60 +27,38 @@ game.listen('update', () => {
     .setParams({
         type: 'perspective',
         fov: 45,
-        aspect: game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight,
+        aspect: r,
         near: 1,
         far: 1000
     })
     .moveTo({ x: 200, y: 200, z: 200 });
     
 
-    game.camera('main').instance.up.set(0,0,1);
+    game.camera('main').$instance.up.set(0,0,1);
     game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
 
-    theta = 360 / game.bounds.width;
-
-    game.render();
+    // game.render();
+    camera = game.camera('main').$instance;
+    quat = new three.Quaternion().setFromUnitVectors( camera.up, new three.Vector3( 0, 1, 0 ) );
+    quatInverse = quat.clone().inverse();
 });
-
-let dist = new three.Vector3( 200, 200, 0 ).distanceTo( new three.Vector3(0, 0, 0) );
 
 game.scene('test')
     .setParams({
         background: 0x999999
     });
 
-function generateTerrain() {
-    return new three.PlaneGeometry(60, 60, 1, 1);
-}
-
 game.item('drakkar')
    .setParams({
-       geometry: generateTerrain(),
+       geometry: new three.PlaneGeometry(60, 60, 1, 1),
        texture: new three.MeshBasicMaterial({color: 0xffcc00})
    })
-   .instance.add( new three.AxisHelper(20) );
+   .$instance.add( new three.AxisHelper(20) );
+game.item('drakkar').appendTo('test');
+// game.scene('test').addItem( game.item('drakkar') );
 
-game.scene('test').addItem( game.item('drakkar') ).instance.add( new THREE.AmbientLight( 0xcccccc ) );
-
-game.listen('dragstart', (e) => {
-    console.log(theta);
-});
 game.listen('dragmove', (e) => {
-    let camera = game.camera('main').instance;
-    let x = camera.position.x;
-    let y = camera.position.y;
-
-    if (e.button === 'left') {
-        let angle = ( theta * e.deltaX ) / 60;
-        camera.position.x = x * Math.cos(angle) + y * Math.sin(angle);
-        camera.position.y = y * Math.cos(angle) - x * Math.sin(angle);
-        game.camera('main').lookAt({ x: 0, y: 0, z: 0 });
-    }
-    else if (e.button === 'right') {
-        camera.translateX(-e.deltaX);
-        camera.translateY(e.deltaY);
-    }
+    game.camera('main').rotate( e.deltaX * ( Math.PI / 180 ) / 4 );
 });
-
 
 export { game };

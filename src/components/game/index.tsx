@@ -1,17 +1,17 @@
 import * as React from 'react';
 import GameModel from './model';
 import { getState } from './../../app';
-import { game } from './../../app/game';
+import { Ymir } from './../../graphic/ymir';
 
 class GameComponent extends React.Component<GameModel, {}> {
     private canvas: HTMLCanvasElement;
 
     componentDidMount() {
-        game.initialize(this.canvas);
+        Ymir.module( 'game' ).initialize( this.canvas );
     }
 
     componentDidUpdate() {
-        game.refresh();
+        Ymir.module( 'game' ).refresh().startRendering();
     }
 
     render() {

@@ -67,7 +67,7 @@ gulp.task('js', () => {
                 ]
             },
             resolve: {
-                extensions: ['', '.tsx', '.ts']
+                extensions: ['', '.tsx', '.ts', '.js', '.jsx']
             },
             externals: {
                 'msgpack-lite': 'msgpack',
@@ -105,6 +105,7 @@ gulp.task('default', ['client', 'server'], () => {
             'src/front/**/*.tsx',
             'src/components/**/*.ts',
             'src/components/**/*.tsx',
+            'src/graphic/**/*.js',
             'src/graphic/**/*.ts',
             'src/graphic/**/*.tsx',
             'src/game/**/*.ts',

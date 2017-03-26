@@ -1,31 +1,32 @@
 import * as three from 'three';
-import { Item } from './item';
+import { YmirItem } from './item';
 
-interface SceneParams {
+interface YmirSceneParams {
     background?: number/*three.Color | three.Texture | three.CubeTexture*/;
     fog?: three.Fog;
 }
 
-class Scene {
-    public instance: three.Scene;
+class YmirScene {
+    public $instance: three.Scene;
+    private $items: { [ id: string ]: YmirItem };
 
     constructor() {}
 
-    setParams(params: SceneParams): Scene {
+    setParams(params: YmirSceneParams): YmirScene {
         let scene: three.Scene;
         let { background } = params;
 
-        if ( !(scene = this.instance) ) {
-            scene = this.instance = new three.Scene();
+        if ( !(scene = this.$instance) ) {
+            scene = this.$instance = new three.Scene();
         }
         scene.background = new three.Color(background);
         return this;
     }
 
-    addItem(item: Item): Scene {
-        this.instance.add(item.instance);
+    addItem(item: YmirItem): YmirScene {
+        this.$instance.add(item.$instance);
         return this;
     }
 }
 
-export { Scene };
+export { YmirScene };

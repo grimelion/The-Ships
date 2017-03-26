@@ -1,16 +1,19 @@
 import * as three from 'three';
 import { has, debounce } from 'lodash';
 import { Emitter, Listeners } from './../tools';
-import { Camera } from './camera';
-import { Scene } from './scene';
-import { Item } from './item';
+import { YmirCamera } from './camera';
+import { YmirScene } from './scene';
+import { YmirItem } from './item';
 
-class GraphicEngine extends Emitter {
-    private cameras: { [ id: string ]: Camera };
-    private scenes: { [id: string ]: Scene };
-    private items: { [ id: string ]: Item };
-    private masterCamera: Camera;
-    private masterScene: Scene;
+let prev: number = 0;
+
+class YmirModule extends Emitter {
+    private cameras: { [ id: string ]: any };
+    private scenes: { [id: string ]: YmirScene };
+    private items: { [ id: string ]: YmirItem };
+    private masterCamera: any;
+    private masterScene: YmirScene;
+    isRendering: boolean;
     bounds: ClientRect;
     renderer: three.WebGLRenderer;
     listeners: Listeners;
@@ -20,18 +23,18 @@ class GraphicEngine extends Emitter {
         this.cameras = Object.create( null );
         this.scenes = Object.create( null );
         this.items = Object.create( null );
+        this.isRendering = false;
     }
 
-    private frame( data?: any ): void {
-        this.renderer.render( this.masterScene.instance, this.masterCamera.instance );
-        requestAnimationFrame( GraphicEngine.prototype.frame.bind( this ) );
+    render( timestamp: number ): void {
+        this.masterCamera.update();
+        this.renderer.render( this.masterScene.$instance, this.masterCamera.$instance );
     }
     
-    initialize( canvas: HTMLCanvasElement, startRendering: boolean = true ): GraphicEngine {
+    initialize( canvas: HTMLCanvasElement, startRendering: boolean = true ): YmirModule {
         this.renderer = new three.WebGLRenderer( { canvas } );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         
-        this.refresh();
         this.emit( 'init' );
 
         let mouseClicked = false;
@@ -114,52 +117,48 @@ class GraphicEngine extends Emitter {
 
         canvas.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-        })
+        });
 
         return this;
     }
 
-    refresh() {
+    refresh(): YmirModule {
         let canvas = this.renderer.domElement;
         this.bounds = canvas.getBoundingClientRect();
         this.emit( 'update' );
+        return this;
     }
 
-    camera( id: string ): Camera {
+    camera( id: string ): any {
         if ( !has( this.cameras, id ) ) {
-            this.masterCamera = this.cameras[ id ] = new Camera();
+            this.masterCamera = this.cameras[ id ] = new YmirCamera();
         }
         return this.cameras[ id ];
     }
 
-    scene( id: string ): Scene {
+    scene( id: string ): YmirScene {
         if ( !has( this.scenes, id ) ) {
-            this.masterScene = this.scenes[ id ] = new Scene();
+            this.masterScene = this.scenes[ id ] = new YmirScene();
         }
         return this.scenes[ id ];
     }
 
-    item( id: string ): Item {
+    item( id: string ): YmirItem {
         if ( !has( this.items, id ) ) {
-            this.items[ id ] = new Item( GraphicEngine.prototype.scene.bind( this ) );
+            this.items[ id ] = new YmirItem( YmirModule.prototype.scene.bind( this ) );
         }
         return this.items[ id ];        
     }
 
-    render(): GraphicEngine {
-        if ( !this.renderer ) {
-            throw new Error( 'Impossible to render uninitialized engine' );
-        }
-
-        this.frame();
-
+    startRendering(): YmirModule {
+        this.isRendering = true;
         return this;
     }
 
-    freeze(): GraphicEngine {
-
+    stopRendering(): YmirModule {
+        this.isRendering = false;
         return this;
     }
 }
 
-export { GraphicEngine };
+export { YmirModule };

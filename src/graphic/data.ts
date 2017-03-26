@@ -1,7 +1,12 @@
-interface Vector {
+interface YmirVector2 {
+    x: number;
+    y: number;
+}
+
+interface YmirVector3 {
     x: number;
     y: number;
     z: number;
 }
 
-export { Vector };
+export { YmirVector2, YmirVector3 };
