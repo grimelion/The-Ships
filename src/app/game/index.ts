@@ -2,6 +2,7 @@ import * as three from 'three';
 import * as msgpack from 'msgpack-lite';
 import { ajax } from './../../tools';
 import { GraphicEngine } from './../../graphic/engine';
+import { ImprovedNoise } from '../../tools/noise';
 
 const game = new GraphicEngine();
 let theta = 0;
@@ -36,8 +37,38 @@ game.scene('test')
         background: 0x999999
     });
 
+    function generateHeight(width: number, height: number) {
+        var data = new Uint8Array( width * height ), perlin = ImprovedNoise(),
+        size = width * height, quality = 2, z = Math.random() * 100;
+        for ( var j = 0; j < 4; j ++ ) {
+            quality *= 4;
+            for ( var i = 0; i < size; i ++ ) {
+                var x = i % width, y = ~~ ( i / width );
+                data[ i ] += Math.abs( perlin.noise( x / quality, y / quality, z ) * 0.5 ) * quality + 10;
+            }
+        }
+        return data;
+    }
+
 function generateTerrain() {
-    return new three.PlaneGeometry(60, 60, 1, 1);
+    let quality = 16,
+        step = 1024 / quality;
+    let plane = new three.PlaneGeometry(200, 200, 10, 10);    
+    let data = generateHeight(100, 100);
+    for (let i = 0, l = plane.vertices.length; i < l; i++) {
+        let x = i % quality,
+            y = Math.floor(i / quality);
+        plane.vertices[i].y = data[(x * step) + (y * step) * 1024] * 2 - 128;
+        if (isNaN(plane.vertices[i].y)) {
+            plane.vertices[i].y = 100;
+        }
+        if(plane.vertices[i].x === 0) {
+            plane.vertices[i].y = 50;
+        }
+        // console.log(plane.vertices[i].y);
+    }
+    // console.log(plane.vertices);
+    return plane;
 }
 
 game.item('drakkar')
