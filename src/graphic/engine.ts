@@ -10,7 +10,7 @@ let prev: number = 0;
 class YmirModule extends Emitter {
     private cameras: { [ id: string ]: any };
     private scenes: { [id: string ]: YmirScene };
-    private items: { [ id: string ]: YmirItem };
+    private items: any;
     private masterCamera: any;
     private masterScene: YmirScene;
     isRendering: boolean;
@@ -143,9 +143,16 @@ class YmirModule extends Emitter {
         return this.scenes[ id ];
     }
 
-    item( id: string ): YmirItem {
+    item( id: string ) {
         if ( !has( this.items, id ) ) {
-            this.items[ id ] = new YmirItem( YmirModule.prototype.scene.bind( this ) );
+            this.items[ id ] = Object.create( YmirItem, {
+                $scene: {
+                    configurable: false,
+                    enumerable: false,
+                    writable: false,
+                    value: YmirModule.prototype.scene.bind( this )
+                }
+            });
         }
         return this.items[ id ];        
     }

@@ -1,5 +1,6 @@
 import * as three from 'three';
 import { get, has } from 'lodash';
+import { YmirEntity } from './entity';
 
 function YmirCamera() {
     this.$shouldUpdate = true;

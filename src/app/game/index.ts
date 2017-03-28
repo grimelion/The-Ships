@@ -88,7 +88,7 @@ game.item('drakkar')
        texture: new three.MeshBasicMaterial({color: 0xffcc00})
    })
    .$instance.add( new three.AxisHelper(20) );
-game.item('drakkar').appendTo('test');
+game.item('drakkar').attachTo('test');
 // game.scene('test').addItem( game.item('drakkar') );
 
 game.listen('dragmove', (e) => {

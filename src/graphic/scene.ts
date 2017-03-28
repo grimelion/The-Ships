@@ -8,7 +8,7 @@ interface YmirSceneParams {
 
 class YmirScene {
     public $instance: three.Scene;
-    private $items: { [ id: string ]: YmirItem };
+    private $items: any;
 
     constructor() {}
 
@@ -23,7 +23,7 @@ class YmirScene {
         return this;
     }
 
-    addItem(item: YmirItem): YmirScene {
+    attachItem(item: any): YmirScene {
         this.$instance.add(item.$instance);
         return this;
     }

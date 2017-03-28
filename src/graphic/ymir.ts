@@ -1,47 +1,40 @@
 import { YmirModule } from './engine';
  
-class Ymir {
-    private static $instance: Ymir;
-    private static $modules: { [ id: string ]: YmirModule };
-    private static $isRendering: boolean;
-    private static $time: number;
+const modules = Object.create( null );
+let time = Date.now();
 
-    private constructor() {
-        Ymir.$modules = Object.create( null );
-    }
-
-    private static render(): void {
-        // if ( !Ymir.$isRendering ) {
-        //     return;
-        // }
-
-        for (let id in Ymir.$modules) {
-            let module = Ymir.$modules[ id ];
-
-            if ( module.isRendering ) {
-                Ymir.$time = Date.now();
-                module.render( Ymir.$time );
-            }
+function render() {
+    for (let id in modules) {
+        let module = modules[ id ]; 
+        if ( module.isRendering ) {
+            time = Date.now();
+            module.render( time );
         }
-
-        requestAnimationFrame( Ymir.render );
     }
-
-    static initialize(): void {
-        if ( !Ymir.$instance ) {
-            Ymir.$instance = new Ymir();
-        }
-        Ymir.$modules = Object.create( null );
-        requestAnimationFrame( Ymir.render );
-    }
-
-    static module( id: string ): YmirModule {
-        if ( !Ymir.$modules[ id ] ) {
-            Ymir.$modules[ id ] = new YmirModule();
-        }       
-        return Ymir.$modules[ id ];
-    }
-
+    requestAnimationFrame( render );    
 }
+
+
+const Ymir = Object.create( null, {
+    initialize: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function () {
+            requestAnimationFrame( render );            
+        }
+    },
+    module: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function module( id ) {
+            if ( !modules[ id ] ) {
+                modules[ id ] = new YmirModule();
+            }
+            return modules[ id ];
+        }
+    }
+});
 
 export { Ymir };
