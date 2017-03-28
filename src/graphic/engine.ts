@@ -43,81 +43,81 @@ class YmirModule extends Emitter {
         let previousY = 0;
         let button: string;
 
-        canvas.addEventListener('mousedown', (e) => {
-            mouseClicked = true;
+        // canvas.addEventListener('mousedown', (e) => {
+        //     mouseClicked = true;
             
-            switch(e.button) {
-                case 0:
-                    button = 'left';
-                    break;
-                case 1:
-                    button = 'wheel';
-                    break;
-                case 2:
-                    button = 'right';
-                    break;
-            }
+        //     switch(e.button) {
+        //         case 0:
+        //             button = 'left';
+        //             break;
+        //         case 1:
+        //             button = 'wheel';
+        //             break;
+        //         case 2:
+        //             button = 'right';
+        //             break;
+        //     }
 
-            let mouseX = e.clientX - this.bounds.left;
-            let mouseY = e.clientY - this.bounds.top;
+        //     let mouseX = e.clientX - this.bounds.left;
+        //     let mouseY = e.clientY - this.bounds.top;
             
-            previousX = mouseX;
-            previousY = mouseY;
+        //     previousX = mouseX;
+        //     previousY = mouseY;
 
-            this.emit('dragstart', {
-                mouseX,
-                mouseY,
-                button
-            });
-        });
+        //     this.emit('dragstart', {
+        //         mouseX,
+        //         mouseY,
+        //         button
+        //     });
+        // });
 
-        canvas.addEventListener('mousemove', (e) => {
-            if ( !mouseClicked ) {
-                return;
-            }
+        // canvas.addEventListener('mousemove', (e) => {
+        //     if ( !mouseClicked ) {
+        //         return;
+        //     }
 
-            if ( !mouseMoved ) {
-                mouseMoved = true;
-            }
+        //     if ( !mouseMoved ) {
+        //         mouseMoved = true;
+        //     }
 
-            let mouseX = e.clientX - this.bounds.left;
-            let mouseY = e.clientY - this.bounds.top;
-            let deltaX = mouseX - previousX;
-            let deltaY = mouseY - previousY;
+        //     let mouseX = e.clientX - this.bounds.left;
+        //     let mouseY = e.clientY - this.bounds.top;
+        //     let deltaX = mouseX - previousX;
+        //     let deltaY = mouseY - previousY;
 
-            previousX = mouseX;
-            previousY = mouseY;
+        //     previousX = mouseX;
+        //     previousY = mouseY;
 
-            this.emit('dragmove', {
-                mouseX,
-                mouseY,
-                deltaX,
-                deltaY,
-                button
-            });
-        }); 
+        //     this.emit('dragmove', {
+        //         mouseX,
+        //         mouseY,
+        //         deltaX,
+        //         deltaY,
+        //         button
+        //     });
+        // }); 
         
-        document.addEventListener('mouseup', (e) => {
-            if ( mouseMoved ) {
-                this.emit('dragend', {
-                    button,
-                    target: e.target,
-                    preventDefault: Event.prototype.preventDefault.bind(e)
-                });
-            }
-            else {
-                this.emit('click', {
-                    button
-                });
-            }
-            button = '';
-            mouseClicked = false;
-            mouseMoved = false;
-        });
+        // document.addEventListener('mouseup', (e) => {
+        //     if ( mouseMoved ) {
+        //         this.emit('dragend', {
+        //             button,
+        //             target: e.target,
+        //             preventDefault: Event.prototype.preventDefault.bind(e)
+        //         });
+        //     }
+        //     else {
+        //         this.emit('click', {
+        //             button
+        //         });
+        //     }
+        //     button = '';
+        //     mouseClicked = false;
+        //     mouseMoved = false;
+        // });
 
-        canvas.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-        });
+        // canvas.addEventListener('contextmenu', (e) => {
+        //     e.preventDefault();
+        // });
 
         return this;
     }

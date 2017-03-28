@@ -92,7 +92,12 @@ game.item('drakkar').attachTo('test');
 // game.scene('test').addItem( game.item('drakkar') );
 
 game.listen('dragmove', (e) => {
-    game.camera('main').rotate( e.deltaX * ( Math.PI / 180 ) / 4 );
+    if (e.button === 'right') {
+        game.camera('main').rotate( e.deltaX * ( Math.PI / 180 ) / 4 );
+    }
+    else {
+        
+    }
 });
 
 export { game };
