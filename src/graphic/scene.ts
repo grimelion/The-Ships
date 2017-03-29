@@ -12,7 +12,7 @@ class YmirScene {
 
     constructor() {}
 
-    setParams(params: YmirSceneParams): YmirScene {
+    configure(params: YmirSceneParams): YmirScene {
         let scene: three.Scene;
         let { background } = params;
 

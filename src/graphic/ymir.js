@@ -2,14 +2,18 @@ import { remove } from 'lodash';
 import { YmirModule } from './engine';
 import { YmirEvent } from './event';
 
-function pushUnique( array = [], value ) {
+function pushItem( array = [], value ) {
     if ( array.indexOf( value ) === -1 ) {
         array.push( value );
     }
 }
 
+function removeItem( array, value ) {
+    remove( array, ( item ) => item === value );
+}
+
 const modules = Object.create( null );
-let time = Date.now();
+let timestamp = 0;
 
 let eventTarget;
 // let event = '';
@@ -24,72 +28,86 @@ let keyDown = false;
 
 let deltaX = 0;
 let deltaY = 0;
-let previousX = 0;
-let previousY = 0;
+let mouseX = 0;
+let mouseY = 0;
 
 const event = Object.create( YmirEvent );
 
+function handleMouseDown( e ) {
+    pushItem( mouseClicked, e.button );
+    pushItem( dispatchedEvents, 'dragstart' );
+    mouseDown = true;
+    mouseMoved = false;
+}
+
+function handleMouseMove( e ) {
+    pushItem( dispatchedEvents, 'mousemove' );
+    if ( mouseDown ) {
+        pushItem( dispatchedEvents, 'dragmove' );
+    }
+    
+    eventTarget = e.target;
+    let previousX = mouseX;
+    let previousY = mouseY;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    deltaX = mouseX - previousX;
+    deltaY = mouseY - previousY;
+
+    mouseMoved = true;
+}
+
+function handleMouseUp( e ) {
+    removeItem( mouseClicked, e.button );
+    pushItem( dispatchedEvents, 'dragend' );
+    if ( !mouseMoved ) {
+        pushItem( dispatchedEvents, 'click' );
+    }
+    mouseDown = false;
+    mouseMoved = false;
+}
+
+function handleContextMenu( e ) {
+    if ( e.target.tagName === 'CANVAS' ) {
+        e.preventDefault();
+    }
+}
+
 function render() {
     event.eventTarget = eventTarget;
-    console.log(mouseClicked);
+    event.deltaX = deltaX;
+    event.deltaY = deltaY;
+    event.mouseX = mouseX;
+    event.mouseY = mouseY;
+    event.frame = -timestamp + ( timestamp = Date.now() );
+
     for (let id in modules) {
         let module = modules[ id ]; 
 
         if ( module.isRendering ) {
-            time = Date.now();
-            module.render( time );
+            module.render( event );
         }
     }
+    
     dispatchedEvents = [];
-    mouseClicked = [];
+    event.deltaX = 0;
+    event.deltaY = 0;
+    event.mouseX = 0;
+    event.mouseY = 0;
     requestAnimationFrame( render );    
 }
-
-document.addEventListener('mousemove', function ( e ) {
-    pushUnique( dispatchedEvents, 'mousemove' );
-    if ( mouseDown ) {
-        pushUnique( dispatchedEvents, 'dragmove' );
-    }
-    
-    eventTarget = e.target;
-    let mouseX = e.clientX;
-    let mouseY = e.clientY;
-    deltaX = mouseX - previousX;
-    deltaY = mouseY - previousY;
-    previousX = mouseX;
-    previousY = mouseY;
-
-    mouseMoved = true;
-});
-document.addEventListener( 'mousedown', function ( e ) {
-    pushUnique( dispatchedEvents, 'dragstart' );
-    pushUnique( mouseClicked, e.button );
-    mouseDown = true;
-    mouseMoved = false;
-});
-document.addEventListener( 'mouseup', function ( e ) {
-    remove( mouseClicked, e.button );
-    pushUnique( dispatchedEvents, 'click' );
-    if ( mouseMoved ) {
-        pushUnique( dispatchedEvents, 'dragend' );
-    }
-    mouseDown = false;
-    mouseMoved = false;
-});
-
-document.addEventListener( 'contextmenu', function ( e ) {
-    if ( e.target.tagName === 'CANVAS' ) {
-        e.preventDefault();
-    }
-});
-
 
 const Ymir = Object.create( null, {
     initialize: {
         configurable: false,
         enumerable: false,
         writable: false,
-        value: function () {
+        value: function initialize() {
+            document.addEventListener( 'mousemove', handleMouseMove );
+            document.addEventListener( 'mousedown', handleMouseDown );
+            document.addEventListener( 'mouseup', handleMouseUp );
+            document.addEventListener( 'contextmenu', handleContextMenu );
+            timestamp = Date.now();
             requestAnimationFrame( render );
         }
     },
@@ -99,7 +117,13 @@ const Ymir = Object.create( null, {
         writable: false,
         value: function module( id ) {
             if ( !modules[ id ] ) {
-                modules[ id ] = new YmirModule();
+                let module = Object.create( YmirModule);
+                module.cameras = Object.create( null );
+                module.scenes = Object.create( null );
+                module.items = Object.create( null );
+                module.isRendering = false;
+                modules[ id ] = module;
+
             }
             return modules[ id ];
         }

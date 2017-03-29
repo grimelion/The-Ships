@@ -31,11 +31,11 @@ import { YmirEntity } from './entity';
 // }
 
 const YmirItem = Object.create( YmirEntity, {
-    setParams: {
+    configure: {
         configurable: false,
         enumerable: false,
         writable: false,
-        value: function setParams( params ) {
+        value: function configure( params ) {
             let { geometry, texture } = params;
             if ( !this.$instance ) {
                 this.$instance = new three.Mesh( geometry, texture );

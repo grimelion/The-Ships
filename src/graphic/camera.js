@@ -45,7 +45,7 @@ YmirCamera.prototype.updateQuaternions = function () {
     this.inverseQuaternion = this.swapQuaternion.clone().inverse();
 };
 
-YmirCamera.prototype.setParams = function (params) {
+YmirCamera.prototype.configure = function (params) {
     let { fov, aspect, near, far, left, right, top, bottom } = params;
 
     if (!this.$instance) {
@@ -97,7 +97,6 @@ YmirCamera.prototype.update = function () {
     if ( !this.$shouldUpdate ) {
         return;
     }
-    console.log(1);
     this.$instance.position.set( this.position.x, this.position.y, this.position.z );
     this.$instance.lookAt( new three.Vector3(this.target.x, this.target.y, this.target.z) );
     this.$shouldUpdate = false;
