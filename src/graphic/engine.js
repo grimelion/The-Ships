@@ -42,7 +42,7 @@ const YmirModule = Object.create( Emitter, {
         writable: false,
         value: function camera( id ) {
             if ( !has( this.cameras, id ) ) {
-                this.masterCamera = this.cameras[ id ] = new YmirCamera();
+                this.masterCamera = this.cameras[ id ] = Object.create( YmirCamera );
             }
             return this.cameras[ id ];
         }    

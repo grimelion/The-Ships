@@ -25,7 +25,7 @@ game.listen('update', () => {
             near: 1,
             far: 1000
         })
-        .initialize( function () {
+        .appearance( function () {
             console.log( this );
         });
 });
