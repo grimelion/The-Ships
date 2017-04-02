@@ -12,7 +12,12 @@ const YmirEvent = Object.create( null, {
         enumerable: false,
         writable: false,
         value: function mouse( mouseEvent ) {
-
+            switch ( mouseEvent ) {
+                case 'dragmove':
+                    if ( this.eventList.indexOf( 'dragmove' ) !== -1 ) {
+                        return true;
+                    }
+            }
         }
     }
 });

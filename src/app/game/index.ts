@@ -24,14 +24,20 @@ game.camera( 'main' )
     .appearance( function () {
         this.locate( 200, 200, 200 );
         this.face( 0, 0, 0 );
+    })
+    .behaviour( function ( e ) {
+        if ( e.mouse( 'dragmove' ) ) {
+            this.rotate( e.deltaX );
+        }
     });
 
-// game.listen('update', () => {
-//     game.camera( 'main' )
-//         .configure({
-//             aspect: game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight
-//         });
-// });
+game.listen('update', () => {
+    console.log(1);
+    game.camera( 'main' )
+        .configure({
+            aspect: game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight
+        });
+});
 
 game.item( 'square' )
     .configure({

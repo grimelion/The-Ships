@@ -27,14 +27,16 @@ const YmirCamera = Object.create( YmirEntity, {
                 let type = this.type;
                 let shouldUpdate = false;
                 if (type === 'orthogonal') {
-                    applyParams(
+                    applyParams.call(
+                        this,
                         ['left', 'right', 'top', 'bottom', 'near', 'far'],
                         params
                     );
                 
                 }
                 else if (type === 'perspective') {
-                    applyParams(
+                    applyParams.call(
+                        this,
                         ['fov', 'aspect', 'near', 'far'],
                         params
                     );               

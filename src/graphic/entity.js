@@ -20,10 +20,49 @@ const YmirEntityControls = Object.create( null, {
         configurable: false,
         enumerable: false,
         writable: false,
-        value: function rotate( x, y, z ) {
+        value: function ( angle, point ) {
+            let offset = new three.Vector3();
+            let spherical = new three.Spherical();
+            let swapQuaternion = new three.Quaternion();
+            let inverseQuaternion = new three.Quaternion();
 
-        }
+            return function rotate( angle ) {
+                swapQuaternion.setFromUnitVectors( 
+                    new three.Vector3( this.instance.up.x, this.instance.up.y, this.instance.up.z ), 
+                    new three.Vector3( 0, 1, 0 )
+                );
+                inverseQuaternion.copy( swapQuaternion ).inverse();
+                
+                offset.set( this.instance.position.x, this.instance.position.y, this.instance.position.z );
+                offset.applyQuaternion( swapQuaternion );
+                spherical.setFromVector3( offset );
+                spherical.theta -= angle;
+                offset.setFromSpherical( spherical );
+                offset.applyQuaternion( inverseQuaternion );
+                this.instance.position.set( offset.x, offset.y, offset.z );
+                this.instance.lookAt( { x: 0, y: 0, z: 0 } );
+            };
+        }()
     },
+
+// YmirCamera.prototype.rotate = function () {
+//     let offset = new three.Vector3();
+//     let spherical = new three.Spherical();
+
+//     return function rotate(angle) {
+    
+//         offset.set( this.position.x, this.position.y, this.position.z );
+//         offset.applyQuaternion( this.swapQuaternion );
+//         spherical.setFromVector3( offset );
+//         spherical.theta -= angle;
+//         offset.setFromSpherical( spherical );
+//         offset.applyQuaternion( this.inverseQuaternion );
+//         this.position = { x: offset.x, y: offset.y, z: offset.z };
+//         this.$shouldUpdate = true;
+//         return this;
+//     };
+// }();
+
     turn: {
         configurable: false,
         enumerable: false,
@@ -45,7 +84,7 @@ const YmirEntityControls = Object.create( null, {
         enumerable: false,
         writable: false,
         value: function face( x, y, z ) {
-            this.instance.lookAt( x, y, z );
+            this.instance.lookAt( { x, y, z } );
         }        
     }
 });

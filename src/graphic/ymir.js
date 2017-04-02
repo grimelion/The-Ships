@@ -86,6 +86,7 @@ function render() {
     event.deltaY = deltaY;
     event.mouseX = mouseX;
     event.mouseY = mouseY;
+    event.eventList = dispatchedEvents;
     event.frame = -timestamp + ( timestamp = Date.now() );
 
     for (let id in modules) {
