@@ -1,6 +1,13 @@
 import { remove } from 'lodash';
+import * as io from 'socket.io-client';
 import { YmirModule } from './engine';
 import { YmirEvent } from './event';
+
+let socket = io( 'ws://localhost:3000' );
+socket.on('actions', ( data ) => {
+    console.log(data);
+});
+
 
 function pushItem( array = [], value ) {
     if ( array.indexOf( value ) === -1 ) {
@@ -98,6 +105,14 @@ function render() {
 }
 
 const Ymir = Object.create( null, {
+    configure: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function configure( options ) {
+            
+        }
+    },
     initialize: {
         configurable: false,
         enumerable: false,

@@ -31,10 +31,26 @@ const YmirEntityControls = Object.create( null, {
         value: function turn( x, y, z ) {
 
         }
-    }    
+    },
+    locate: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function locate( x, y, z ) {
+            this.instance.position.set( x, y, z );
+        }
+    },
+    face: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function face( x, y, z ) {
+            this.instance.lookAt( x, y, z );
+        }        
+    }
 });
 
-const YmirEntity = Object.create( null, {	
+const YmirEntity = Object.create( null, {
     appearance: {
         configurable: false,
         enumerable: false,
@@ -52,19 +68,21 @@ const YmirEntity = Object.create( null, {
             this.$behaviourHandler = handler;
             return this;
         }
-    },
-    update: {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function update( event ) {
-            YmirEntityControls.instance = this;
-            this.behaviour.call( YmirEntityControls, event );
-        }
     }
 });
 
-export { YmirEntity };
+export { YmirEntity, YmirEntityControls };
     // handleFrame( timestamp: number ): void {
     //     this.$instance.translateX( this.$moveSpeed / ( 1000 / timestamp ) );
+    // }
+
+    // ,
+    // update: {
+    //     configurable: false,
+    //     enumerable: false,
+    //     writable: false,
+    //     value: function update( event ) {
+    //         YmirEntityControls.instance = this;
+    //         this.behaviour.call( YmirEntityControls, event );
+    //     }
     // }

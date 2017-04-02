@@ -4,6 +4,7 @@ import { Emitter, Listeners } from './../tools';
 import { YmirCamera } from './camera';
 import { YmirScene } from './scene';
 import { YmirItem } from './item';
+import { YmirEntityControls } from './entity';
 
 const YmirModule = Object.create( Emitter, {
     initialize: {
@@ -11,9 +12,8 @@ const YmirModule = Object.create( Emitter, {
         enumerable: false,
         writable: false,
         value: function initialize( canvas ) {
-            this.emit( 'init' );
             this.renderer = new three.WebGLRenderer( { canvas } );
-            
+            this.emit( 'init' );
             return this;
         }        
     },
@@ -21,8 +21,20 @@ const YmirModule = Object.create( Emitter, {
         configurable: false,
         enumerable: false,
         writable: false,
-        value: function render() {
-            this.renderer.render( this.masterScene.$instance, this.masterCamera.$instance );
+        value: function render( event ) {
+            let camera = this.masterCamera;
+            YmirEntityControls.instance = camera.$instance;
+            if ( !camera.$appeared ) {
+                 camera.$appearanceHandler.call( YmirEntityControls );
+                 camera.$appeared = true;
+                 console.log(this.masterScene.$instance);
+                 console.log(this.masterCamera.$instance);
+            }
+            else if ( camera.$behaviourHandler ) {
+                camera.$behaviourHandler.call( YmirEntityControls, event );
+            }
+            
+            this.renderer.render( this.masterScene.$instance, camera.$instance );
         }
     },
     refresh: {

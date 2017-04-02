@@ -35,7 +35,8 @@ gulp.task('vendors', () => {
             'node_modules/react-dom/dist/react-dom.min.js', 
             'node_modules/redux/dist/redux.min.js', 
             'node_modules/lodash/lodash.min.js', 
-            'node_modules/three/build/three.min.js' 
+            'node_modules/three/build/three.js',
+            'node_modules/socket.io-client/dist/socket.io.min.js' 
         ])
         .pipe(gulp.dest('build/client/js'));
 });
@@ -75,7 +76,8 @@ gulp.task('js', () => {
                 'react-dom': 'ReactDOM',
                 'redux': 'Redux',
                 'lodash': '_',
-                'three': 'THREE'
+                'three': 'THREE',
+                'socket.io-client': 'io'
             },
             output: {
                 filename: 'app.js'

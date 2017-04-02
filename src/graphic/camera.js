@@ -27,22 +27,35 @@ const YmirCamera = Object.create( YmirEntity, {
                 let type = this.type;
                 let shouldUpdate = false;
                 if (type === 'orthogonal') {
-                    this.applyParams(
+                    applyParams(
                         ['left', 'right', 'top', 'bottom', 'near', 'far'],
                         params
                     );
                 
                 }
                 else if (type === 'perspective') {
-                    this.applyParams(
+                    applyParams(
                         ['fov', 'aspect', 'near', 'far'],
                         params
                     );               
                 }
             }
-            // this.$instance.up.set( this.up.x, this.up.y, this.up.z );
+            this.$instance.up.set( 0, 0, 1 );
             // this.updateQuaternions();
             return this;
+
+            function applyParams( keys ) {
+                let shouldUpdate = false;
+                keys.forEach( ( item ) => {
+                    if ( has( params, item ) && this.$instance[ item ] !== get( params, item ) ) {
+                        this.$instance[ item ] = get( params, item );
+                        shouldUpdate = true;
+                    }
+                });
+                if ( shouldUpdate ) {
+                    this.$instance.updateProjectionMatrix();          
+                }
+            }
         }
     }
 });

@@ -12,24 +12,33 @@ game.scene( 'main' )
         background: 0x999999
     });
 
-game.listen('update', () => {
-    let r = game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight;
 
-    if (!r) return;
+game.camera( 'main' )
+    .configure({
+        type: 'perspective',
+        fov: 45,
+        aspect: 1,
+        near: 1,
+        far: 1000
+    })
+    .appearance( function () {
+        this.locate( 200, 200, 200 );
+        this.face( 0, 0, 0 );
+    });
 
-    game.camera('main')
-        .configure({
-            type: 'perspective',
-            fov: 45,
-            aspect: r,
-            near: 1,
-            far: 1000
-        })
-        .appearance( function () {
-            console.log( this );
-        });
-});
+// game.listen('update', () => {
+//     game.camera( 'main' )
+//         .configure({
+//             aspect: game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight
+//         });
+// });
 
+game.item( 'square' )
+    .configure({
+        geometry: new three.PlaneGeometry(60, 60, 1, 1),
+        texture: new three.MeshBasicMaterial({color: 0xffcc00})
+    })
+    .attachTo( 'main' );
 
 // let deltaX: number;
 // let offset = new three.Vector3();
@@ -39,7 +48,7 @@ game.listen('update', () => {
 // let spherical = new three.Spherical(75, Math.PI / 4, 0);
 // let sphericalDelta = new three.Spherical();
 // let quat: three.Quaternion;
-// let quatInverse: three.Quaternion;;
+// let quatInverse: three.Quaternion;
 
 // game.listen('update', () => {
 //     let r = game.renderer.domElement.clientWidth / game.renderer.domElement.clientHeight;
